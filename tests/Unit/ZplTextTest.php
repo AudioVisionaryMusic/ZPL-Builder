@@ -9,47 +9,63 @@ use IMusic\ZplBuilder\Factory\Elements\Barcode;
 use IMusic\ZplBuilder\Factory\Helpers\FontSize;
 use IMusic\ZplBuilder\Factory\Helpers\BarcodeSize;
 use IMusic\ZplBuilder\Factory\Helpers\BarcodeType;
+use IMusic\ZplBuilder\Factory\Helpers\DPI;
+use IMusic\ZplBuilder\Factory\Helpers\FontType;
+use IMusic\ZplBuilder\Factory\Helpers\PrintMode;
+use IMusic\ZplBuilder\Factory\Options;
 
 class ZplTextTest extends TestCase
 {
 
     public function testCanGenerateRegularText()
     {
-        $label = new Label("30m", "21mm");
+        $options = new Options(
+            DPI::DPI_203,
+            FontType::ZERO,
+            FontSize::SIZE_35,
+            PrintMode::TEAR_OFF
+        );
 
-        $text = (new Text("BX000371", FontSize::SIZE_30))
+        $label = new Label("80mm", "50mm", $options);
+
+        $text = (new Text('$supplierItemId$', FontSize::SIZE_55))
             ->bold()
-            ->x("4mm")
-            ->y("1mm");
+            ->width('50mm')
+            ->x("25mm")
+            ->y("2mm");
         $label->addElement($text);
 
-        $barcodeContent = '9788797115800';
+        $barcodeContent = '$itemId$';
         $barcode = (new Barcode(
             $barcodeContent,
-            BarcodeSize::SIZE_42,
+            BarcodeSize::SIZE_65,
             BarcodeType::CODE_128
         ))
-        ->x("0mm")
-        ->y("5mm");
+        ->width('0.4mm')
+        ->x("5mm")
+        ->y("9mm");
 
         $label->addElement($barcode);
 
         $label->addElement(
-            (new Text("Lager 140219", FontSize::SIZE_8))->x("1mm")->y("12mm")
+            (new Text('$identifier$'))
+                ->width('75mm')
+                ->x("1mm")
+                ->y("22mm")
         );
         $label->addElement(
-            (new Text("TV2 | Live i digterne", FontSize::SIZE_8))
-            ->width('28mm')
-            ->lines(4)
+            (new Text('$artist$'))
+            ->width('75mm')
+            ->lines(5)
             ->x("1mm")
-            ->y("15mm")
+            ->y("27mm")
         );
 
         $zpl = $label->toZpl();
 
-        $this->assertStringContainsString('^FDBX000371^FS^AAC,,30^FO46.2,11.8^FH^FB295,2,0,L^FDBX000371^FS^AAC,,30^FO47.2,10.8^FH^FB295,2,0,L^FDBX000371^FS^FO0,59^BY2.36,2,42^BC^FD9788797115800^FS', $zpl);
-        $this->assertStringContainsString('^BY2.36,2,42^BC^FD9788797115800^FS', $zpl);
-        $this->assertStringContainsString('^AAC,,8^FO11.8,141.6^FH^FB295,2,0,L^FDLager 140219^FS', $zpl);
-        $this->assertStringContainsString('^AAC,,8^FO11.8,177^FH^FB330.4,4,0,L^FDTV2 | Live i digterne^FS', $zpl);
+        \file_put_contents('zpl.zpl', str_replace('^', "\n^", $zpl));
+
+        $this->assertStringContainsString('^XA', $zpl);
+        $this->assertStringContainsString('^XZ', $zpl);
     }
 }

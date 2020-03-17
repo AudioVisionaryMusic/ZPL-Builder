@@ -39,6 +39,11 @@ class FontSize
     public const SIZE_33 = 33;
     public const SIZE_34 = 34;
     public const SIZE_35 = 35;
+    public const SIZE_40 = 40;
+    public const SIZE_45 = 45;
+    public const SIZE_50 = 50;
+    public const SIZE_55 = 55;
+    public const SIZE_60 = 60;
 
     public static function closest(int $size)
     {
