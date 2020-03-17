@@ -1,0 +1,43 @@
+{
+    "name": "imusic/zpl-builder",
+    "description": "Easily write ZPL instructions",
+    "keywords": [
+        "imusic",
+        "zpl-builder"
+    ],
+    "homepage": "https://github.com/imusic/zpl-builder",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jesper Jacobsen",
+            "email": "jj@imusic.dk",
+            "homepage": "https://imusic.dk",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "^8.2",
+        "symfony/var-dumper": "^4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "IMusic\\ZplBuilder\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IMusic\\ZplBuilder\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
